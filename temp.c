@@ -1,11 +1,11 @@
 #define SETUP
 #define UPDATE
 #define RENDER
-#include "display.c"
-#include "Matrix2D.h"
+#include "./include/display.c"
+#include "./include/Matrix2D.h"
 #define ALMOG_RENDER_SHAPES_IMPLEMENTATION
-#include "Almog_Render_Shapes.h"
-#include "Almog_Dynamic_Array.h"
+#include "./include/Almog_Render_Shapes.h"
+#include "./include/Almog_Dynamic_Array.h"
 
 typedef struct {
     size_t length;

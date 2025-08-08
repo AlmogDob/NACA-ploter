@@ -30,7 +30,7 @@ void setup(game_state_t *game_state)
 void update(game_state_t *game_state)
 {
     size_t num_of_points = 1000;
-    int NACA = 6450;
+    int NACA = 1212;
     double factor = fmin(game_state->window_h, game_state->window_w) / 1.5;
     double x_offset = game_state->window_w/4;
     double y_offset = game_state->window_h/2;
@@ -65,17 +65,27 @@ void create_NACA(ada_point_array *U_points, ada_point_array *L_points, ada_point
         double x   = delta_x * i;
         double y_t = 5 * t * (0.2969 * sqrt(x) - 0.1260 * x - 0.3516 * x * x + 0.2843 * x * x * x - 0.1036 * x * x * x * x);
         double y_c, dy_c__dx;
-        if (x <= p) {
-            y_c      = m / p / p * (2 * p * x - x * x);
-            dy_c__dx = m / p / p * (p - x);
+
+        Point p_U;
+        Point p_L;
+        Point p_C;
+        if (p == 0 || m == 0) {
+            p_U.x = x; p_U.y = + y_t; p_U.z = 0;
+            p_L.x = x; p_L.y = - y_t; p_L.z = 0;
+            p_C.x = x; p_C.y = 0    ; p_C.z = 0;
         } else {
-            y_c      = m / (1 - p) / (1 - p) * ((1 - 2 * p) + 2 * p * x - x * x);
-            dy_c__dx = 2 * m / (1 - p) / (1 - p) * (p - x);
+            if (x <= p) {
+                y_c      = m / p / p * (2 * p * x - x * x);
+                dy_c__dx = m / p / p * (p - x);
+            } else {
+                y_c      = m / (1 - p) / (1 - p) * ((1 - 2 * p) + 2 * p * x - x * x);
+                dy_c__dx = 2 * m / (1 - p) / (1 - p) * (p - x);
+            }
+            double theta = atan(dy_c__dx);
+            p_U.x = x - y_t * sin(theta); p_U.y = y_c + y_t * cos(theta); p_U.z = 0;
+            p_L.x = x + y_t * sin(theta); p_L.y = y_c - y_t * cos(theta); p_L.z = 0;
+            p_C.x = x                   ; p_C.y = y_c                   ; p_C.z = 0;
         }
-        double theta = atan(dy_c__dx);
-        Point p_U = {.x = x - y_t * sin(theta), .y = y_c + y_t * cos(theta), .z = 0};
-        Point p_L = {.x = x + y_t * sin(theta), .y = y_c - y_t * cos(theta), .z = 0};
-        Point p_C = {.x = x, .y = y_c, .z = 0};
 
         p_U.x = p_U.x * factor + x_offset;
         p_L.x = p_L.x * factor + x_offset;

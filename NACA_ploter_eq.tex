@@ -1,0 +1,267 @@
+\documentclass[11pt, a4paper]{article}
+
+\usepackage{amsmath, amssymb, titling}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage[colorlinks=true, linkcolor=black, urlcolor=black, citecolor=black]{hyperref}
+\usepackage{url}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{float}
+\usepackage{cancel}
+\usepackage{fancyhdr, lastpage}
+\usepackage{fourier-orns}
+\usepackage{xcolor}
+\usepackage{nomencl}
+\makenomenclature
+\usepackage{etoolbox}
+\usepackage{sidecap}
+\usepackage{adjustbox}
+\usepackage{listings}
+\usepackage{matlab-prettifier}
+\usepackage[T1]{fontenc}
+
+\sidecaptionvpos{figure}{c}
+\setlength{\headheight}{18.2pt}
+\setlength{\nomlabelwidth}{1.5cm}
+
+\renewcommand\maketitlehooka{\null\mbox{}\vfill}
+\renewcommand\maketitlehookd{\vfill\null}
+
+\renewcommand{\headrule}{\vspace{-5pt}\hrulefill\raisebox{-2.1pt}{\quad\leafleft\decoone\leafright\quad}\hrulefill}
+\newcommand{\parder}[2]{\frac{\partial {#1}}{\partial {#2}}}
+% \renewcommand\nomgroup[1]{%
+%   \item[\bfseries
+%   \ifstrequal{#1}{F}{Far--Away Properties}{%
+%   \ifstrequal{#1}{N}{Dimensionless Numbers}{%
+%   \ifstrequal{#1}{M}{Matrices}{%
+%   \ifstrequal{#1}{D}{Diagonals}{%
+%   \ifstrequal{#1}{V}{Vectors}{%
+%   \ifstrequal{#1}{P}{Dimensionless Average Properties}{}}}}}}
+% ]}
+
+\title{Intro to Turbulent Flow \\ HW1}
+\author{Almog Dobrescu ID 214254252}
+
+% \pagestyle{fancy}
+\cfoot{Page \thepage\ of \pageref{LastPage}}
+
+\begin{document}
+
+% \thispagestyle{empty}
+% \maketitle
+% \newpage
+
+\pagenumbering{roman}
+
+\vfil
+\tableofcontents
+\vfil
+% \listoffigures
+% \vfil
+\lstlistoflistings
+\newpage
+
+% \printnomenclature
+% \newpage
+
+\pagestyle{fancy}
+\pagenumbering{arabic}
+\setcounter{page}{1}
+
+\section{4 digits - MPxx}
+\begin{itemize}
+    \item $m=M/100$
+    \item $p=P/10=x_{mc}$
+    \item $t=xx$ - The maximum thickness as chord percentage, so $t=12$ means maximum thickness is $12\%$ of the chord.
+    \item The leading edge approximates a cylinder with a radius of $r=1.1019t^2$.
+\end{itemize}
+\begin{equation}
+    y_c=\left\{\begin{array}{cc}
+        \displaystyle \frac{m}{p^2}\left(2px-x^2\right) & 0\le x<p \\\\
+        \displaystyle \frac{m}{\left(1-p\right)^2}\left(\left(1-2p\right)+2px-x^2\right) & p\le x\le 1 \\\\
+    \end{array}\right.
+\end{equation}
+\begin{equation}
+    \frac{dy_c}{dx}=\left\{\begin{array}{cc}
+        \displaystyle \frac{2m}{p^2}\left(p-x\right) & 0\le x<p \\\\
+        \displaystyle \frac{2m}{\left(1-p\right)^2}\left(p-x\right) & p\le x\le 1 \\\\
+    \end{array}\right.
+\end{equation}
+
+\subsection{Surfaces Generation}
+Open airfoil:
+\begin{equation}
+    y_t=5t\left(0.969\sqrt{x}-0.1260x-0.3516x^2+0.2843x^3-0.1015x^4\right)
+\end{equation}
+To close the airfoil, the sum of the coefficient needs to be equal to 1. Changing the last coefficient results in the smallest change to the overall shape of the airfoil.
+\begin{equation}
+    y_t=5t\left(0.969\sqrt{x}-0.1260x-0.3516x^2+0.2843x^3-0.1036x^4\right)
+\end{equation}
+The respectively upper and lower airfoil surface are given by:
+\begin{equation}
+    \begin{matrix}
+        \begin{array}{rcl}
+            x_U & = & x-y_t\sin\left(\theta\right) \\
+            x_L & = & x+y_t\sin\left(\theta\right)
+        \end{array} & \begin{array}{rcl}
+            y_U & = & y_c+y_t\cos\left(\theta\right) \\
+            y_L & = & y_c-y_t\cos\left(\theta\right)
+        \end{array}
+    \end{matrix}
+\end{equation}
+Where:
+\begin{itemize}
+    \item $\displaystyle \theta=\arctan\left(\frac{dy_c}{dx}\right)$
+\end{itemize}
+
+\newpage
+\section{5 digits - LPSxx}
+\begin{itemize}
+    \item $\displaystyle x_{mc}=0.05P$.
+    \item $\displaystyle CL_i=0.15L$.
+    \item $t=xx$ - The maximum thickness as chord percentage, so $t=12$ means maximum thickness is $12\%$ of the chord.
+    \item The S digit is only between 1 and 5 (because the polynomial approximations).
+    \item The parameters are calculated at $L=2$, and linearly scaled for a different desired design lift coefficient $CL_i$ as explained at Sec.\ref{sec: scaling 5 digits}.
+\end{itemize}
+
+\subsection{$S=0$}
+\begin{equation}
+    y_c=\left\{\begin{array}{cc}
+        \displaystyle \frac{k_1}{6}\left(x^3-3rx^2+r^2\left(3-r\right)x\right) & 0\le x<r \\\\
+        \displaystyle \frac{k_1r^3}{6}\left(1-x\right) & r\le x\le 1 \\\\
+    \end{array}\right.
+\end{equation}
+\begin{equation}
+    \frac{dy_c}{dx}=\left\{\begin{array}{cc}
+        \displaystyle \frac{k_1}{6}\left(3x^2-6rx+r^2\left(3-r\right)\right) & 0\le x<r \\\\
+        \displaystyle -\frac{k_1r^3}{6} & r\le x\le 1
+    \end{array}\right.
+\end{equation}
+
+\subsubsection{$r$}
+\begin{equation}
+    \begin{array}{c}
+        \displaystyle x_{mc}=r\left(1-\sqrt{\frac{r}{3}}\right) \\\\
+        \displaystyle x_{mc}=r-\sqrt{\frac{r^3}{3}} \\\\
+        \displaystyle \sqrt{\frac{r^3}{3}}=r-x_{mc} \\\\
+        \displaystyle \frac{r^3}{3}=\left(r-x_{mc}\right)^2 \\\\
+        \displaystyle \frac{r^3}{3}=r^2-2rx_{mc}+x_{mc}^2 \\\\
+        \displaystyle \frac{1}{3}r^3-r^2+2rx_{mc}-x_{mc}^2=0 \\\\
+        \vdots \\\\
+        \text{solving numerically}
+    \end{array}
+\end{equation}
+
+\subsubsection{$k_1$}
+\begin{equation}
+    k_1=\frac{6}{N}CL_i
+\end{equation}
+\begin{equation}
+    N=\frac{3r-7r^2+8r^3-4r^4}{\sqrt{r-r^2}}-\frac{3}{2}\left(1-2r\right)\left(\frac{\pi}{2}-\arcsin\left(1-2r\right)\right)
+\end{equation}
+
+\subsubsection{fittings - L=2} \begin{table}[H]
+    \renewcommand{\arraystretch}{1.5}
+    \begin{center}
+        \begin{tabular}{c|c|c|c}
+            P & $x_mc$ & r & $k_1$ \\
+            \hline
+            1 & 0.05 & 0.0580 & 361.40 \\
+            2 & 0.10 & 0.1260 & 51.649 \\
+            3 & 0.15 & 0.2025 & 15.957 \\
+            4 & 0.20 & 0.290  & 6.643 \\
+            5 & 0.25 & 0.391  & 3.23
+        \end{tabular}
+    \end{center}
+\end{table}
+\begin{equation}
+    \begin{array}{rcl}
+        r & = & 3.333x_{mc}^3+0.7x_{cm}^2+1.197x_{cm}-0.004 \\\\
+        k1 & = & 1.5149e6x_{mc}^4-1.0877e6x_{mc}^3+2.8646e5x_{mc}^2-3.2968e4x_{mc}+1.4202e3
+    \end{array}
+\end{equation}
+
+\subsection{$S=1$}
+\begin{equation}
+    y_c=\left\{\begin{array}{cc}
+        \displaystyle \frac{k_1}{6}\left((x-r)^3-\frac{k_2}{k_1}\left(1-r\right)^3x-r^3x+r^3\right) & 0\le x<r \\\\
+        \displaystyle \frac{k_1}{6}\left(3(x-r)^2-\frac{k_2}{k_1}\left(1-r\right)^3-r^3\right) & r\le x\le 1 \\\\
+    \end{array}\right.
+\end{equation}
+\begin{equation}
+    \frac{dy_c}{dx}=\left\{\begin{array}{cc}
+        \displaystyle \frac{k_1}{6}\left(\frac{k_2}{k_1}(x-r)^3-\frac{k_2}{k_1}\left(1-r\right)^3x-r^3x+r^3\right) & 0\le x<r \\\\
+        \displaystyle \frac{k_1}{6}\left(3\frac{k_2}{k_1}(x-r)^2-\frac{k_2}{k_1}\left(1-r\right)^3-r^3\right) & r\le x\le 1
+    \end{array}\right.
+\end{equation}
+
+\subsubsection{fittings - L=2} \begin{table}[H]
+    \renewcommand{\arraystretch}{1.5}
+    \begin{center}
+        \begin{tabular}{c|c|c|c|c}
+            P & $x_mc$ & r & $k_1$ & $\frac{k_2}{k_1}$ \\
+            \hline
+            2 & 0.10 & 0.130 & 51.999 & 0.000764 \\
+            3 & 0.15 & 0.217 & 15.793 & 0.00677 \\
+            4 & 0.20 & 0.318 & 6.520  & 0.0303 \\
+            5 & 0.25 & 0.441 & 3.191  & 0.1355
+        \end{tabular}
+    \end{center}
+\end{table}
+\begin{equation}
+    \begin{array}{rcl}
+        r & = & 10.6667x_{mc}^3-2x_{cm}^2+1.7333{cm}-0.034 \\\\
+        k_1 & = & -2.7973e4x_{mc}^3+1.7973e4x_{cm}^2-3.8884e3x_{cm}+289.076 \\\\ 
+        \displaystyle \frac{k_2}{k_1} & = & 85.528x_{mc}^3-34.9828x_{cm}^2+4.8032x_{cm}-0.2153
+    \end{array}
+\end{equation}
+
+\subsection{Scaling for Different L digit}
+\label{sec: scaling 5 digits}
+In order to scale for L values different from 2, just multiply the $y_c$ values:
+\begin{equation}
+    \begin{array}{c}
+        \displaystyle {y_c}_\text{scaled}=\frac{L}{2}y_c \\\\
+        \displaystyle {\frac{dy_c}{dx}}_\text{scaled}=\frac{L}{2}\frac{dy_c}{dx}
+    \end{array}
+\end{equation}
+
+\subsection{Surfaces Generation}
+Open airfoil:
+\begin{equation}
+    y_t=5t\left(0.969\sqrt{x}-0.1260x-0.3516x^2+0.2843x^3-0.1015x^4\right)
+\end{equation}
+To close the airfoil, the sum of the coefficient needs to be equal to 1. Changing the last coefficient results in the smallest change to the overall shape of the airfoil.
+\begin{equation}
+    y_t=5t\left(0.969\sqrt{x}-0.1260x-0.3516x^2+0.2843x^3-0.1036x^4\right)
+\end{equation}
+The respectively upper and lower airfoil surface are given by:
+\begin{equation}
+    \begin{matrix}
+        \begin{array}{rcl}
+            x_U & = & x-y_t\sin\left(\theta\right) \\
+            x_L & = & x+y_t\sin\left(\theta\right)
+        \end{array} & \begin{array}{rcl}
+            y_U & = & y_c+y_t\cos\left(\theta\right) \\
+            y_L & = & y_c-y_t\cos\left(\theta\right)
+        \end{array}
+    \end{matrix}
+\end{equation}
+Where:
+\begin{itemize}
+    \item $\displaystyle \theta=\arctan\left(\frac{dy_c}{dx}\right)$
+\end{itemize}
+
+\vfil
+\nocite{*}
+\bibliographystyle{ieeetr}
+\bibliography{references}
+
+\appendix
+\section{Code Examples}
+\subsection{MatLab}
+\begin{lstinputlisting}[captionpos=b,stringstyle=\color{magenta},frame=single, numbers=left, style=MatLab-editor, basicstyle=\mlttfamily\small, caption={Example code listing},mlshowsectionrules=true]{./NACA_4_or_5_digit_ploter.m}
+\end{lstinputlisting}
+
+\end{document}

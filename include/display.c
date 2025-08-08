@@ -175,11 +175,11 @@ int initialize_window(game_state_t *game_state)
         return -1;
     }
 
-    game_state->font = TTF_OpenFont("./font/Gabriely Black.ttf",32);
-    if (!game_state->font) {
-        fprintf(stderr, "%s:%d: [Error] loading font.\n", __FILE__, __LINE__);
-        return -1;
-    }
+    // game_state->font = TTF_OpenFont("./font/Gabriely Black.ttf",32);
+    // if (!game_state->font) {
+    //     fprintf(stderr, "%s:%d: [Error] loading font.\n", __FILE__, __LINE__);
+    //     return -1;
+    // }
 
     (void)game_state;
     

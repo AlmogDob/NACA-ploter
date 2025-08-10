@@ -69,13 +69,16 @@ typedef struct {
     int q_was_pressed;
 
     SDL_Window *window;
-    int window_w;
-    int window_h;
-    SDL_Renderer *renderer;
-    TTF_Font *font;
-
     SDL_Surface *window_surface;
     SDL_Texture *window_texture;
+    int window_w;
+    int window_h;
+
+    SDL_Renderer *renderer;
+
+    TTF_Font *font;
+    SDL_Surface *text_surface;
+    SDL_Texture *text_texture;
 
     Mat2D_uint32 window_pixels_mat;
 } game_state_t;
@@ -175,11 +178,11 @@ int initialize_window(game_state_t *game_state)
         return -1;
     }
 
-    // game_state->font = TTF_OpenFont("./font/Gabriely Black.ttf",32);
-    // if (!game_state->font) {
-    //     fprintf(stderr, "%s:%d: [Error] loading font.\n", __FILE__, __LINE__);
-    //     return -1;
-    // }
+    game_state->font = TTF_OpenFont("./Alegreya/Alegreya-VariableFont_wght.ttf",64);
+    if (!game_state->font) {
+        fprintf(stderr, "%s:%d: [Error] loading font.\n", __FILE__, __LINE__);
+        return -1;
+    }
 
     (void)game_state;
     
@@ -282,8 +285,12 @@ void render_window(game_state_t *game_state)
     /*------------------------------------------------------------------------*/
 
     copy_mat_to_surface_RGB(game_state);
+    SDL_Rect text_rect = { .x = 50, .y = 50, .w = game_state->text_surface->w, .h = game_state->text_surface->h};
+    SDL_BlitSurface(game_state->text_surface, NULL, game_state->window_surface, &text_rect);
+
     SDL_UpdateWindowSurface(game_state->window);
 
+    // SDL_RenderPresent(game_state->renderer);
 }
 
 void destroy_window(game_state_t *game_state)

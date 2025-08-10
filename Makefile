@@ -18,6 +18,21 @@ clean_temp:
 
 debug_build_temp: temp.c
 	@gcc ./temp.c $(CFLAGS) -g -o temp
+
+profile_temp: profile_build_temp
+	./temp
+	@echo
+	gprof ./temp gmon.out | /home/almog/.local/bin/gprof2dot | dot -Tpng -Gdpi=200 -o output.png
+	imview ./output.png
+	# xdg-open ./output.png
+	@echo
+	rm ./gmon.out ./output.png 
+	make clean_temp
+
+profile_build_temp: ./temp.c
+	@echo [Info] building temp
+	@gcc ./temp.c $(CFLAGS) -p -ggdb -o ./temp
+
 # valgrind -s --leak-check=full ./temp
 # cloc --exclude-lang=JSON,make .
 
